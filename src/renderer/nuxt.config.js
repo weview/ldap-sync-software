@@ -16,6 +16,7 @@ module.exports = {
     {ssr: true, src: '@/plugins/element.js'},
     {ssr: true, src: '@/plugins/crisp.js'},
     '@/plugins/axios',
+    '@/plugins/sentry',
   ],
   buildModules: [
     '@nuxtjs/dotenv',
