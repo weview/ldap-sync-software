@@ -1,8 +1,6 @@
 /* globals INCLUDE_RESOURCES_PATH */
 import { app } from 'electron'
 import { config } from 'dotenv';
-import autoUpdate from 'update-electron-app';
-autoUpdate();
 config();
 
 /**

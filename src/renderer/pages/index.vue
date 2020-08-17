@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { shell, autoUpdater } from 'electron';
+  import { shell, remote } from 'electron';
   import { mapState } from 'vuex';
 
   export default {
@@ -45,20 +45,25 @@
         if (this.isSyncing) {
           setTimeout(() => this.autoUpdate(), 5000);
         } else {
-          autoUpdater.quitAndInstall();
+          remote.autoUpdater.quitAndInstall();
         }
       },
     },
     mounted () {
-      autoUpdater.on(`update-downloaded`, () => this.autoUpdate());
+      remote.autoUpdater.setFeedURL(`https://update.electronjs.org/weview/ldap-sync-software/win32-x64/${remote.app.getVersion()}`);
+      remote.autoUpdater.on(`update-downloaded`, () => this.autoUpdate());
+      remote.autoUpdater.checkForUpdates();
+      setInterval(() => {
+        remote.autoUpdater.checkForUpdates();
+      }, 600000);
       if (localStorage.getItem(`isLogged`) === `1`) {
         this.$store.commit(`auth/SET_AXIOS_TOKEN`);
       }
       if (localStorage.getItem(`syncReady`) === `1`) {
         this.$store.dispatch(`ad/startSync`);
-        this.$router.push({
-          name: `dashboard`,
-        });
+        //this.$router.push({
+          //name: `dashboard`,
+        //});
       }
     }
   };
