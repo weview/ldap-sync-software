@@ -37,9 +37,6 @@
         isLoginInProgress: false,
       }
     },
-    mounted() {
-      console.log(localStorage.getItem(`isLogged`));
-    },
     methods: {
       async login() {
         this.isLoginInProgress = true;

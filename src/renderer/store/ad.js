@@ -60,7 +60,6 @@ export default {
       state.filterGroups = JSON.parse(localStorage.getItem(`groups`));
       state.filterOu = JSON.parse(localStorage.getItem(`ou`));
       state.type = localStorage.getItem(`syncType`);
-      console.log(state.filterGroups, state.filterOu, state.type);
     },
     SET_IS_SYNCING (state, isSyncing) {
       state.isSyncing = isSyncing;
