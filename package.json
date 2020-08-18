@@ -1,6 +1,6 @@
 {
   "name": "weview-software-ldap",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Weview LDAP sync tool",
   "main": "./dist/main/index.js",
   "scripts": {
