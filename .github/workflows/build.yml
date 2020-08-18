@@ -43,7 +43,7 @@ jobs:
           asset_content_type: application/vnd.microsoft.portable-executable
       - name: Get App Version
         id: package-version
-        uses: martinbeentjes/npm-get-version-action@master
+        uses: tyankatsu0105/read-package-version-actions@v1
       - name: Upload RELEASES Asset
         uses: actions/upload-release-asset@v1
         env:
@@ -59,6 +59,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/squirrel-windows/weview-software-ldap-${{ steps.package-version.outputs.current-version}}-full.nupkg
+          asset_path: ./build/squirrel-windows/weview-software-ldap-${{ steps.package-version.outputs.version}}-full.nupkg
           asset_name: weview-sync-tool.exe
           asset_content_type: application/octet-stream
