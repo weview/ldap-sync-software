@@ -3,8 +3,8 @@ const ICONS_DIR = 'build/icons/'
 const windowsOS = {
   win: {
     icon: ICONS_DIR + 'icon.png',
-    publisherName: 'michal',
-    target: 'nsis'
+    publisherName: 'weview',
+    target: 'squirrel'
   },
 
   nsis: {
@@ -42,6 +42,9 @@ const macOS = {
 }
 
 module.exports = {
+  squirrelWindows: {
+    iconUrl: `https://resources.weview.io/ldap/icon.ico`,
+  },
   asar: false,
   productName: 'Weview Sync Tool',
   appId: 'io.weview.sync',
@@ -67,5 +70,5 @@ module.exports = {
   ],
   ...windowsOS,
   ...linuxOS,
-  ...macOS
+  ...macOS,
 }

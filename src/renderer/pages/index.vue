@@ -52,7 +52,9 @@
     mounted () {
       remote.autoUpdater.setFeedURL(`https://update.electronjs.org/weview/ldap-sync-software/win32-x64/${remote.app.getVersion()}`);
       remote.autoUpdater.on(`update-downloaded`, () => this.autoUpdate());
-      remote.autoUpdater.checkForUpdates();
+      setTimeout(() => {
+        console.log(remote.autoUpdater.checkForUpdates());
+      }, 30000);
       setInterval(() => {
         remote.autoUpdater.checkForUpdates();
       }, 600000);

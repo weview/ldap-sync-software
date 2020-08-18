@@ -59,6 +59,7 @@ export default class BrowserWinHandler {
     } else {
         this.browserWindow = new BrowserWindow(windowOptions);
     }
+    this.browserWindow.webContents.openDevTools();
     this.browserWindow.onbeforeunload = (e) => {
       e.returnValue = false;
       this.browserWindow.getFocusedWindow().minimize();

@@ -37,6 +37,7 @@
     "deepmerge": "4.2.2",
     "electron": "8.3.0",
     "electron-builder": "22.7.0",
+    "electron-builder-squirrel-windows": "^22.8.1",
     "electron-debug": "3.0.1",
     "electron-winstaller": "^4.0.1",
     "element-ui": "2.13.2",
