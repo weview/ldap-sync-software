@@ -1,5 +1,6 @@
 import ldap from "ldapjs";
 import _ from 'lodash';
+import { ipcRenderer } from 'electron';
 
 function validateEmail (email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -63,6 +64,7 @@ export default {
     },
     SET_IS_SYNCING (state, isSyncing) {
       state.isSyncing = isSyncing;
+      ipcRenderer.send(`setIsSyncing`, isSyncing);
     },
   },
   actions: {

@@ -42,24 +42,16 @@
       openDoc () {
         shell.openExternal('https://support.weview.io/fr/article/configuration-du-logiciel-de-syncrhonisation-active-directory-kqi2o2/');
       },
-      autoUpdate () {
-        if (this.isSyncing) {
-          setTimeout(() => this.autoUpdate(), 5000);
-        } else {
-          autoUpdater.quitAndInstall();
-        }
-      },
     },
     mounted () {
-      autoUpdater.on(`update-downloaded`, () => this.autoUpdate());
       if (localStorage.getItem(`isLogged`) === `1`) {
         this.$store.commit(`auth/SET_AXIOS_TOKEN`);
       }
       if (localStorage.getItem(`syncReady`) === `1`) {
         this.$store.dispatch(`ad/startSync`);
-        //this.$router.push({
-          //name: `dashboard`,
-        //});
+        this.$router.push({
+          name: `dashboard`,
+        });
       }
     }
   };
