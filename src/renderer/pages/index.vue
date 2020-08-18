@@ -52,10 +52,6 @@
     },
     mounted () {
       autoUpdater.on(`update-downloaded`, () => this.autoUpdate());
-      console.log(autoUpdater.checkForUpdates());
-      setInterval(() => {
-        autoUpdater.checkForUpdates();
-      }, 600000);
       if (localStorage.getItem(`isLogged`) === `1`) {
         this.$store.commit(`auth/SET_AXIOS_TOKEN`);
       }

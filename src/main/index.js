@@ -1,7 +1,14 @@
 /* globals INCLUDE_RESOURCES_PATH */
 import { app } from 'electron'
 import { config } from 'dotenv';
+import { autoUpdater } from 'electron-updater';
 config();
+
+
+autoUpdater.checkForUpdates();
+setInterval(() => {
+  autoUpdater.checkForUpdates();
+}, 600000);
 
 /**
  * Set `__resources` path to resources files in renderer process
