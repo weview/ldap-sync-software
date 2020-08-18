@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 14
       - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
+        uses: michalzaq12/action-electron-nuxt@v1
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
