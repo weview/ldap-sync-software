@@ -11,6 +11,9 @@
     "postinstall": "electron-builder install-app-deps "
   },
   "build": {
+    "appId": "io.weview.ldap",
+    "productName": "Weview LDAP Sync",
+    "copyright": "Copyright © 2020 Weview",
     "extraMetadata": {
       "main": "src/main/index.js"
     },
