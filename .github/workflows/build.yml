@@ -32,8 +32,7 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload exe Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,3 +41,24 @@ jobs:
           asset_path: ./build/squirrel-windows/weview-sync-tool.exe
           asset_name: weview-sync-tool.exe
           asset_content_type: application/vnd.microsoft.portable-executable
+      - name: Get App Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      - name: Upload RELEASES Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/squirrel-windows/RELEASES
+          asset_name: RELEASES
+          asset_content_type: text/plain
+      - name: Upload nupkg Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/squirrel-windows/weview-software-ldap-${{ steps.package-version.outputs.current-version}}-full.nupkg
+          asset_name: weview-sync-tool.exe
+          asset_content_type: application/octet-stream
