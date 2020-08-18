@@ -16,7 +16,49 @@ jobs:
         with:
           node-version: 14
       - name: Build/release Electron app
-        uses: michalzaq12/action-electron-nuxt@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp src/renderer/.env.prod src/renderer/.env
+          yarn
+          yarn build
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github_token: ${{ secrets.github_token }}
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload executable Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/weview-sync-tool.exe
+          asset_name: weview-sync-tool.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
+      - name: Upload latest.yml Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/latest.yml
+          asset_name: latest.yml
+          asset_content_type: application/vnd.microsoft.portable-executable
+      - name: Upload blockmap Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/weview-sync-tool.exe.blockmap
+          asset_name: weview-sync-tool.exe.blockmap
+          asset_content_type: application/octet-stream
