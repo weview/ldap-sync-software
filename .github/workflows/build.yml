@@ -2,8 +2,8 @@ name: Build/release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - master
 
 jobs:
   build:
@@ -16,49 +16,12 @@ jobs:
         with:
           node-version: 14
       - name: Build/release Electron app
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cp src/renderer/.env.prod src/renderer/.env
-          yarn
-          yarn build
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Upload exe Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/squirrel-windows/weview-sync-tool.exe
-          asset_name: weview-sync-tool.exe
-          asset_content_type: application/vnd.microsoft.portable-executable
-      - name: Get App Version
-        id: package-version
-        uses: tyankatsu0105/read-package-version-actions@v1
-      - name: Upload RELEASES Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/squirrel-windows/RELEASES
-          asset_name: RELEASES
-          asset_content_type: text/plain
-      - name: Upload nupkg Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/squirrel-windows/weview-software-ldap-${{ steps.package-version.outputs.version}}-full.nupkg
-          asset_name: weview-sync-tool.exe
-          asset_content_type: application/octet-stream
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
