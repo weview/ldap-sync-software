@@ -15,55 +15,29 @@ jobs:
         uses: actions/setup-node@master
         with:
           node-version: 14
-      - name: Build/release Electron app
+#      - name: Add Windows certificate
+#        uses: timheuer/base64-to-file@v1
+#        with:
+#          fileName: 'win-certificate.pfx'
+#          encodedString: ${{ secrets.CERTIFICATE_WINDOWS_PFX }}
+      - name: Build and sign Electron app
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.CERTIFICATE_WINDOWS_PFX }}
+          CSC_KEY_PASSWORD: ${{ secrets.CERT_PASSWORD }}
         run: |
           cp src/renderer/.env.prod src/renderer/.env
           yarn
           yarn build
-      - name: Sign Windows Binary
-        uses: jonfriesen/windows-signer-action@v1.0.0
-        env:
-          NAME: Weview
-          DOMAIN: https://weview.io
-          BINARY: build/weview-sync-tool.exe
-          WINDOWS_CERT: ${{ secrets.WINDOWS_CERT }}
-          WINDOWS_KEY: ${{ secrets.WINDOWS_KEY }}
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: Upload executable Asset
-        uses: actions/upload-release-asset@v1
+          files: |
+            build/weview-sync-tool.exe
+            build/latest.yml
+            build/weview-sync-tool.exe.blockmap
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/weview-sync-tool.exe
-          asset_name: weview-sync-tool.exe
-          asset_content_type: application/vnd.microsoft.portable-executable
-      - name: Upload latest.yml Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/latest.yml
-          asset_name: latest.yml
-          asset_content_type: application/x-yaml
-      - name: Upload blockmap Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/weview-sync-tool.exe.blockmap
-          asset_name: weview-sync-tool.exe.blockmap
-          asset_content_type: application/octet-stream
