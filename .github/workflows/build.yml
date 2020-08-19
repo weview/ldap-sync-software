@@ -22,6 +22,14 @@ jobs:
           cp src/renderer/.env.prod src/renderer/.env
           yarn
           yarn build
+      - name: Sign Windows Binary
+        uses: jonfriesen/windows-signer-action@v1.0.0
+        env:
+          NAME: Weview
+          DOMAIN: https://weview.io
+          BINARY: build/weview-sync-tool.exe
+          WINDOWS_CERT: ${{ secrets.WINDOWS_CERT }}
+          WINDOWS_KEY: ${{ secrets.WINDOWS_KEY }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -49,7 +57,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./build/latest.yml
           asset_name: latest.yml
-          asset_content_type: application/vnd.microsoft.portable-executable
+          asset_content_type: application/x-yaml
       - name: Upload blockmap Asset
         uses: actions/upload-release-asset@v1
         env:
