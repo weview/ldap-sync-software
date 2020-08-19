@@ -15,11 +15,6 @@ jobs:
         uses: actions/setup-node@master
         with:
           node-version: 14
-#      - name: Add Windows certificate
-#        uses: timheuer/base64-to-file@v1
-#        with:
-#          fileName: 'win-certificate.pfx'
-#          encodedString: ${{ secrets.CERTIFICATE_WINDOWS_PFX }}
       - name: Build and sign Electron app
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

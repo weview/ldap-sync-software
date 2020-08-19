@@ -64,7 +64,6 @@ export default class BrowserWinHandler {
     } else {
         this.browserWindow = new BrowserWindow(windowOptions);
     }
-    this.browserWindow.webContents.openDevTools();
     this.browserWindow.onbeforeunload = (e) => {
       e.returnValue = false;
       this.browserWindow.getFocusedWindow().minimize();
@@ -101,7 +100,6 @@ export default class BrowserWinHandler {
 
   setAutoUpdate () {
     autoUpdater.on(`update-downloaded`, () => this.autoUpdate());
-    autoUpdater.checkForUpdates();
     setInterval(() => {
       autoUpdater.checkForUpdates();
     }, 600000);
