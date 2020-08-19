@@ -1,32 +1,12 @@
 /* globals INCLUDE_RESOURCES_PATH */
 import { app, ipcMain } from 'electron';
 import { config } from 'dotenv';
-import { autoUpdater } from 'electron-updater';
 config();
 
 
 ipcMain.on(`setIsSyncing`, (event, isSyncing) => {
   global.isSyncing = isSyncing;
 });
-
-let updating = false;
-
-function autoUpdate () {
-  if (updating) return;
-  updating = true;
-  if (global.isSyncing) {
-    setTimeout(() => autoUpdate(), 5000);
-  } else {
-    autoUpdater.quitAndInstall();
-  }
-  updating = false;
-}
-
-autoUpdater.on(`update-downloaded`, () => autoUpdate());
-autoUpdater.checkForUpdates();
-setInterval(() => {
-  autoUpdater.checkForUpdates();
-}, 600000);
 
 /**
  * Set `__resources` path to resources files in renderer process

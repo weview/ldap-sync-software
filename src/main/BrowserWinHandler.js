@@ -2,6 +2,8 @@ import { EventEmitter } from 'events'
 import { BrowserWindow, app } from 'electron'
 import * as Splashscreen from "@trodi/electron-splashscreen";
 import { resolve } from 'path';
+import AutoLaunch from 'auto-launch';
+import { autoUpdater } from 'electron-updater';
 const isProduction = process.env.NODE_ENV === 'production'
 
 export default class BrowserWinHandler {
@@ -14,6 +16,7 @@ export default class BrowserWinHandler {
     this.allowRecreate = allowRecreate
     this.options = options
     this.browserWindow = null
+    this.updating = false
     this._createInstance()
   }
 
@@ -56,6 +59,8 @@ export default class BrowserWinHandler {
         resizable: false,
       };
       this.browserWindow = Splashscreen.initSplashScreen(config);
+      this.setAutoUpdate();
+      this.setAutoStart();
     } else {
         this.browserWindow = new BrowserWindow(windowOptions);
     }
@@ -69,6 +74,37 @@ export default class BrowserWinHandler {
       this.browserWindow = null
     })
     this._eventEmitter.emit('created')
+  }
+
+  async setAutoStart () {
+    const launcher = new AutoLaunch({
+      name: `Weview LDAP Sync Tool`,
+      path: app.getPath(`exe`),
+    });
+    if (!await launcher.isEnabled()) {
+      launcher.enable();
+    }
+  }
+
+  autoUpdate () {
+    if (this.updating) return;
+    this.updating = true;
+    if (global.isSyncing) {
+      setTimeout(() => this.autoUpdate(), 5000);
+    } else {
+      try {
+        autoUpdater.quitAndInstall();
+      } catch (e) {}
+    }
+    this.updating = false;
+  }
+
+  setAutoUpdate () {
+    autoUpdater.on(`update-downloaded`, () => this.autoUpdate());
+    autoUpdater.checkForUpdates();
+    setInterval(() => {
+      autoUpdater.checkForUpdates();
+    }, 600000);
   }
 
   _recreate () {
